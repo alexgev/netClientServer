@@ -5,6 +5,9 @@ class NetServer extends net.Server {
     super(...props);
     this._eol = '\n';
     this._taskIdField = props.taskIdField ||  '_taskId';
+    this._password = props.password;
+    this._passwordField = props.passwordField || 'password';
+    // this._needAuthorizedByPassword = props.needAuthorizedByPassword;
     this._methodField = 'method';
     this._dataField = 'payload';
     this._methodParamsField = 'data';
@@ -29,6 +32,7 @@ class NetServer extends net.Server {
         obj = JSON.parse(json);
         if (!obj[this._taskIdField]) return this._badRequest(socket);
         const taskId = this._getTaskIdFromObj(obj);
+        if (this._password && obj[this._passwordField] !== this._password) return this._badRequest(socket, taskId, `Uncorrect password`);
         if (!obj[this._dataField]) return this._badRequest(socket, taskId, `${this._dataField} is required`);
         const payload = obj[this._dataField];
         const routePath = payload[this._methodField];
