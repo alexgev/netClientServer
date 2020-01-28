@@ -71,7 +71,11 @@ class NetClient extends events {
       [this._dataField]: data
     };
     let {message, taskId} = this._formatDataToSend(obj);
-    this.socket.write(message);
+    try {
+      this.socket.write(message);
+    } catch (e) {
+      return {error: e.message}
+    }
     const result = await this._createTaskListener(taskId);
     return result;
   }
