@@ -33,8 +33,8 @@ class NetClient extends events {
     // this.socket.on('error', err => console.error('Error on client', err));
     this.socket.on('close', async () => {
       this._flushAllTasks();
-      await this._delay(5 * 1000);
-      this._initConnection();
+      // await this._delay(5 * 1000);
+      // this._initConnection();
     });
   }
 
